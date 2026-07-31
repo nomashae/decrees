@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <title>Decrees | Nomashae</title>
+  <title>Decrees & News | Nomashae</title>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="phonescreenengine.css">
   <style>
@@ -77,7 +77,7 @@
     /* HERO */
     .hero {
       padding: 5rem 2rem 4rem; text-align: center;
-      border-bottom: 1px solid var(--border); /*background: var(--bg2);*/
+      border-bottom: 1px solid var(--border);
       transition: background var(--t), border-color var(--t);
     }
     .hero-label {
@@ -104,11 +104,16 @@
       padding: 4rem 2rem 5rem;
     }
 
-    /* ═══════════════════════════════════════
-       DECREE CARD — the main building block
-       To add a new decree, copy a .decree
-       block and fill in the content.
-    ═══════════════════════════════════════ */
+    /* FILTER BAR */
+    .cat-filters { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem; }
+    .cat-filter-btn {
+      padding: 0.35rem 0.9rem; border-radius: 20px; border: 1.5px solid var(--border);
+      background: var(--bg2); color: var(--ink2); font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.18s;
+    }
+    .cat-filter-btn:hover, .cat-filter-btn.active { border-color: var(--accent); background: color-mix(in srgb,var(--accent) 10%,transparent); color: var(--accent); }
+
+    /* DECREE CARD */
     .decree {
       background: var(--card);
       border: 1px solid var(--border);
@@ -120,20 +125,14 @@
       transition: background var(--t), border-color var(--t), transform 0.25s;
       opacity: 0; transform: translateY(20px);
       animation: fadeUp 0.5s ease forwards;
+      scroll-margin-top: 90px;
     }
     .decree:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,0.1); }
+    .decree:target { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent); }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
-    /* stagger animation for each card */
-    .decree:nth-child(1) { animation-delay: 0.05s; }
-    .decree:nth-child(2) { animation-delay: 0.15s; }
-    .decree:nth-child(3) { animation-delay: 0.25s; }
-    .decree:nth-child(4) { animation-delay: 0.35s; }
-    .decree:nth-child(5) { animation-delay: 0.45s; }
-    @keyframes fadeUp {
-      to { opacity: 1; transform: translateY(0); }
-    }
+    .decree-img { width: 100%; max-height: 340px; object-fit: cover; border-radius: 10px; margin-bottom: 1.2rem; display: block; }
 
-    /* ── DECREE HEADER ── */
     .decree-header {
       display: flex; justify-content: space-between; align-items: flex-start;
       gap: 1rem; flex-wrap: wrap;
@@ -151,8 +150,6 @@
       flex-shrink: 0;
     }
 
-    /* ── STATUS BADGES ── */
-    /* Usage: <span class="badge badge-active">Active</span> */
     .badge {
       font-size: 0.58rem; font-weight: 700; letter-spacing: 2px;
       text-transform: uppercase; padding: 0.25rem 0.7rem;
@@ -163,71 +160,38 @@
     .badge-press   { background: rgba(90,155,191,0.12); color: #2e6e9e; border: 1px solid rgba(90,155,191,0.25); }
     .badge-order   { background: rgba(196,98,45,0.12);  color: #9e4420; border: 1px solid rgba(196,98,45,0.25); }
     .badge-decree  { background: rgba(160,120,60,0.12); color: #7a5a20; border: 1px solid rgba(160,120,60,0.25); }
+    .badge-urgent  { background: rgba(196,68,68,0.12);  color: #c44;    border: 1px solid rgba(196,68,68,0.25); }
     [data-theme="dark"] .badge-active  { background: rgba(74,124,89,0.2);  color: #6aad82; }
     [data-theme="dark"] .badge-passed  { background: rgba(74,124,89,0.2);  color: #6aad82; }
     [data-theme="dark"] .badge-press   { background: rgba(90,155,191,0.2); color: #7bb8d8; }
     [data-theme="dark"] .badge-order   { background: rgba(196,98,45,0.2);  color: #e07a4a; }
     [data-theme="dark"] .badge-decree  { background: rgba(160,120,60,0.2); color: #c8a050; }
+    [data-theme="dark"] .badge-urgent  { background: rgba(196,68,68,0.22); color: #e88; }
 
-    /* ── DATE STAMP ── */
-    /* Usage: <span class="date-stamp">24 Jan 2026</span> */
     .date-stamp {
       font-size: 0.65rem; color: var(--ink2); font-weight: 400;
       letter-spacing: 1px; transition: color var(--t);
     }
 
-    /* ── DECREE BODY ── */
     .decree-body { font-size: 0.92rem; font-weight: 300; color: var(--ink2); line-height: 1.85; transition: color var(--t); }
-
-    /* ── SECTION HEADING inside a decree ── */
-    /* Usage: <p class="decree-section">Addressing New Flag:</p> */
-    .decree-section {
-      font-size: 0.72rem; font-weight: 700; letter-spacing: 3px;
-      text-transform: uppercase; color: var(--accent);
-      margin: 1.2rem 0 0.4rem; transition: color var(--t);
+    /* Markdown-rendered content inside the body */
+    .decree-body h1, .decree-body h2, .decree-body h3 {
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--accent); margin: 1.2rem 0 0.5rem; transition: color var(--t);
     }
-
-    /* ── PARAGRAPH inside a decree ── */
-    /* Usage: <p class="decree-p">Content here.</p> */
-    .decree-p {
-      margin-bottom: 0.6rem; color: var(--ink); font-size: 0.92rem;
-      font-weight: 300; line-height: 1.85; transition: color var(--t);
-    }
-
-    /* ── QUOTE / PHILOSOPHICAL NOTE ── */
-    /* Usage: <blockquote class="decree-quote">Text</blockquote> */
-    .decree-quote {
+    .decree-body p { margin-bottom: 0.7rem; color: var(--ink); font-size: 0.92rem; font-weight: 300; }
+    .decree-body ul, .decree-body ol { margin: 0.5rem 0 0.9rem 1.3rem; color: var(--ink); }
+    .decree-body li { margin-bottom: 0.3rem; }
+    .decree-body a { color: var(--accent); }
+    .decree-body strong { color: var(--ink); font-weight: 600; }
+    .decree-body blockquote {
       border-left: 3px solid var(--accent); padding: 0.8rem 1.2rem;
       background: var(--bg2); border-radius: 0 8px 8px 0;
-      margin: 1rem 0; font-style: italic; font-size: 0.9rem;
-      color: var(--ink2); transition: background var(--t), border-color var(--t), color var(--t);
+      margin: 1rem 0; font-style: italic; font-size: 0.9rem; color: var(--ink2);
     }
+    .decree-body code { background: var(--bg2); padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.85em; }
+    .decree-body img { max-width: 100%; border-radius: 8px; margin: 0.6rem 0; }
 
-    /* ── DEFINITION LIST ── */
-    /* Usage: <dl class="decree-defs"><dt>Term</dt><dd>Definition</dd></dl> */
-    .decree-defs { margin: 0.8rem 0; }
-    .decree-defs dt {
-      font-weight: 600; font-size: 0.88rem; color: var(--ink);
-      margin-top: 0.6rem; transition: color var(--t);
-    }
-    .decree-defs dd {
-      font-size: 0.88rem; font-weight: 300; color: var(--ink2);
-      margin-left: 1rem; transition: color var(--t);
-    }
-
-    /* ── VOTE RESULT ── */
-    /* Usage: <div class="vote-result"><span class="vote-for">1/1</span> voted in favour</div> */
-    .vote-result {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      background: var(--bg2); border: 1px solid var(--border);
-      border-radius: 8px; padding: 0.5rem 1rem; margin-top: 0.8rem;
-      font-size: 0.78rem; color: var(--ink2);
-      transition: background var(--t), border-color var(--t), color var(--t);
-    }
-    .vote-for { font-weight: 700; color: var(--accent); transition: color var(--t); }
-
-    /* ── SIGNATURE ── */
-    /* Usage: <div class="decree-sig">Eftimij Novakovski</div> */
     .decree-sig {
       margin-top: 1.5rem; padding-top: 1rem;
       border-top: 1px solid var(--border);
@@ -241,7 +205,13 @@
       transition: color var(--t);
     }
 
-    /* FOOTER */
+    .news-empty {
+      text-align: center; padding: 4rem 2rem; color: var(--ink2);
+      border: 1px dashed var(--border); border-radius: var(--radius);
+    }
+    .news-empty i { font-size: 2rem; margin-bottom: 1rem; display: block; opacity: 0.4; color: var(--accent); }
+    .news-empty p { font-size: 0.88rem; font-weight: 300; }
+
     footer {
       border-top: 1px solid var(--border); text-align: center; padding: 2.5rem 1rem;
       font-size: 0.68rem; letter-spacing: 3px; text-transform: uppercase;
@@ -249,25 +219,21 @@
     }
 
     .btnbtn {
-      display: block;
-      width: fit-content;
-      
-      text-decoration: none;
-      background: var(--accent);
-      border: none;
-      color: #fff;
-      padding: 0.85rem;
-      border-radius: 8px;
-      cursor: pointer;
-      font-family: 'Outfit', sans-serif;
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      transition: opacity 0.2s;
-
+      display: block; width: fit-content; text-decoration: none;
+      background: var(--accent); border: none; color: #fff;
+      padding: 0.85rem; border-radius: 8px; cursor: pointer;
+      font-family: 'Outfit', sans-serif; font-size: 0.8rem; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase; transition: opacity 0.2s;
       margin: 0 auto;
     }
+
+    #topBtn {
+      position: fixed; bottom: 30px; right: 30px; padding: 16px 16px;
+      opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+      cursor: pointer; background-color: var(--bg2); border: none;
+      border-radius: 5px; text-align: center;
+    }
+    #topBtn.visible { opacity: 1; pointer-events: auto; }
 
     @media (max-width: 600px) {
       nav { padding: 0 1rem; }
@@ -276,204 +242,159 @@
       .decree-meta { align-items: flex-start; }
     }
 
-    .decree_link {
-      text-decoration: none;
-      color: var(--accent);
-    }
-    .decree_link:hover {
-      text-decoration: underline;
-    }
-  </style>
-
-  <style>
-  #topBtn {
-    position: fixed;
-    bottom: 130px;
-    right: 30px;
-    padding: 16px 16px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.4s ease;
-    cursor: pointer;
-    background-color: var(--bg2);
-    /* color: var(--ink); */
-    border: none;
-    border-radius: 5px;
-    text-align: center;
-  }
-
-  #topBtn.visible {
-    opacity: 1;
-    pointer-events: auto;
-  }
+    .decree_link { text-decoration: none; color: var(--accent); }
+    .decree_link:hover { text-decoration: underline; }
   </style>
 </head>
 <body data-theme="light" data-element="earth">
 
   <nav>
     <div class="nav-left">
-      <a href="http://www.nomashae.org" class="back-link" data-i18n="tback">
+      <a href="index.html" class="back-link">
         <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
         Back
       </a>
-      <a href="http://www.nomashae.org" class="nav-brand" data-i18n="ntnmsh">Nomashae</a>
+      <a href="index.html" class="nav-brand">Nomashae</a>
     </div>
     <div class="nav-right">
       <button class="nav-btn" id="dark-btn">Dark</button>
       <button class="nav-btn" id="lang-btn">EN</button>
     </div>
-    
   </nav>
 
   <div class="hero">
-    <span class="hero-label" data-i18n="ron">Republic of Nomashae</span>
-    <h1 class="hero-title" data-i18n="dan">Decrees & News</h1>
-    <p class="hero-sub" data-i18n="pdan">Official orders, press releases and announcements</p>
+    <span class="hero-label">Republic of Nomashae</span>
+    <h1 class="hero-title">Decrees & News</h1>
+    <p class="hero-sub">Official orders, press releases and announcements</p>
   </div>
 
   <div class="section alt">
-    <span class="hero-label" data-i18n="constitution">Constitution</span>
-    <h1 class="hero-title" data-i18n="constitution-title">Constitution of Nomashae</h1>
-    <p class="hero-sub" data-i18n="constitution-decsr">The Constitution of Republic of Nomashae</p>
-    <h1 class="hero-label"> </h1> <!--Placeholder--->
-    <div data-i18n="buttontranslate">
+    <span class="hero-label">Constitution</span>
+    <h1 class="hero-title">Constitution of Nomashae</h1>
+    <p class="hero-sub">The Constitution of Republic of Nomashae</p>
+    <h1 class="hero-label">&nbsp;</h1>
+    <div>
       <a href="./assets/constitution/Constitution.pdf" class="btnbtn">View Constitution</a>
     </div>
   </div>
 
   <div class="decrees-wrap">
-
-    <!--
-    ═══════════════════════════════════════════
-    HOW TO ADD A NEW DECREE:
-
-    Copy the block below, paste it at the TOP
-    of this list (newest first), and fill in:
-
-    • .decree-title   — the title
-    • .badge-???      — badge-press / badge-order / badge-decree / badge-passed
-    • .date-stamp     — the date
-    • .decree-section — subheadings inside (optional)
-    • .decree-p       — paragraphs
-    • .decree-quote   — italic quote block (optional)
-    • .decree-defs    — definition list (optional)
-    • .vote-result    — vote outcome (optional)
-    • .decree-sig     — signature + date at bottom
-    ═══════════════════════════════════════════
-
-    <div class="decree">
-      <div class="decree-header">
-        <div class="decree-title">Your Title Here</div>
-        <div class="decree-meta">
-          <span class="badge badge-order">Executive Order</span>
-          <span class="date-stamp">DD Mon YYYY</span>
-        </div>
-      </div>
-      <div class="decree-body">
-        <p class="decree-section">Section Heading</p>
-        <p class="decree-p">Your content here.</p>
-        <div class="decree-sig">
-          <span class="sig-date">Signed DD Mon YYYY</span>
-          Eftimij Novakovski
-        </div>
-      </div>
+    <div class="cat-filters" id="cat-filters">
+      <button class="cat-filter-btn active" data-cat="all">All</button>
+      <button class="cat-filter-btn" data-cat="Announcement">Announcement</button>
+      <button class="cat-filter-btn" data-cat="Decree">Decree</button>
+      <button class="cat-filter-btn" data-cat="Event">Event</button>
+      <button class="cat-filter-btn" data-cat="Urgent">Urgent</button>
+      <button class="cat-filter-btn" data-cat="Historical Record">Historical Record</button>
     </div>
 
-    ═══════════════════════════════════════════
-    -->
-
-    <div class="decree">
-      <div class="decree-header">
-        <div class="decree-title">Press Release 2 - Language, Ministry Developments and Language</div>
-        <div class="decree-meta">
-          <div class="badge badge-press">Press Release</div>
-          <div class="date-stamp">22 May 2026 · 9:20 XST</div>
-        </div>
-      </div>
-      <div class="decree-body">
-        <p class="decree-section">Addressing Language Deprecation</p>
-        <p class="decree-p">Due to how hard the language is to learn, not many speakers speaking it and actively missing words. We, from the bottom of our harts have decided that we are traditionalizing the language. From now on Flyingo Bisdomic will be saved in the Library of Congress and Tradition and it will be protected by law.</p>
-        <p class="decree-section">Addressing Ministry Developments</p>
-        <p class="decree-p">We are happy to say that now there are over 15 ministries operating and many more to come in the near furure.</p>
-        <p class="decree-section">Addressing Professionalism</p>
-        <p class="decree-p">Unfortunately due to many failed attempts at making the server, we are speeding things up with a beta version coming by the end of 2026. We are also happy to annaunce that soon we are transitioning to <a href="./coming-soon.html" target="_blank" class="decree_link">nomashae.org</a></p>
-        <div class="decree-sig">
-          <span class="sig-date">Signed 22 May 2026</span> Eftimij Novakovski
-        </div>
+    <div id="decree-list">
+      <div class="news-empty">
+        <i class="fa-solid fa-satellite-dish"></i>
+        <p>Loading decrees from the Ministry…</p>
       </div>
     </div>
+  </div>
 
-    <div class="decree">
-      <div class="decree-header">
-        <div class="decree-title">Establishment of Nomashae National Media (N.N.M.)</div>
-        <div class="decree-meta">
-          <div class="badge badge-press">Press Release</div>
-          <div class="date-stamp">22 May 2026 · 9:20 XST</div>
-        </div>
-      </div>
-      <div class="decree-body">
-        <p class="decree-section">Creation Notice</p>
-        <p class="decree-p">In order to inform our citizens the Government of Nomashae and the Ministry of Communication have developed the Nomashae National Media a studio where we will be answering and making video audio decreases. The written forms will still be on this website but they will include the videos too. Every video will be posted over on the YouTube channel of the republic accesible <a href="https://www.youtube.com/@Republic_Nomashae" target="_blank" class="decree_link">here</a>. The first planned Press Release like this will be on 1st of June</p>
-        <div class="decree-sig">
-          <span class="sig-date">Signed 22 May 2026</span> Eftimij Novakovski
-        </div>
-      </div>
-    </div>
-    
-    <!-- DECREE 1 — Press Release -->
-    <div class="decree">
-      <div class="decree-header">
-        <div class="decree-title" data-i18n="p1t">Press Release 1 — Culture, President & Flags</div>
-        <div class="decree-meta">
-          <span class="badge badge-press" data-i18n="p1b">Press Release</span>
-          <span class="date-stamp" data-i18n="p1d">24 Jan 2026 · 09:15 XST</span>
-        </div>
-      </div>
-      <div class="decree-body">
-        <p class="decree-section" data-i18n="p1s1">Addressing New Flag</p>
-        <p class="decree-p" data-i18n="p1p1">In order to make the flag of <strong>DMN Nomashae</strong> more modern and flowier, the flag will be updated to a newer 4K resolution design. The flag will mostly stay the same but the text and coat of arms element will be removed. <strong>DMN Nomashae</strong> will also receive its own coat of arms to better represent its citizens.</p>
-
-        <p class="decree-section" data-i18n="p1s2">Addressing New President</p>
-        <p class="decree-p" data-i18n="p1p2"><strong>DMN Nomashae</strong> has reinstated Krste Dimov as President. This comes after he was dismissed from his position wrongfully.</p>
-
-        <p class="decree-section" data-i18n="p1s3">Addressing the Anthem</p>
-        <p class="decree-p" data-i18n="p1p3">The anthem will not change in lyrics but will receive its own instrumental version and a combined vocal + instrumental version.</p>
-
-        <div class="decree-sig" data-i18n="p1sig">
-          <span class="sig-date">Closed 24 Jan 2026 · 10:27 XST</span>
-          Eftimij Novakovski
-        </div>
-      </div>
-    </div>
-
-    <!-- DECREE 2 — Executive Order -->
-    <div class="decree">
-      <div class="decree-header">
-        <div class="decree-title" data-i18n="p2t">Executive Order: Democratic Transition</div>
-        <div class="decree-meta">
-          <span class="badge badge-passed" data-i18n="p2b">Passed</span>
-          <span class="date-stamp" data-i18n="p2-3d">26 Jan 2026</span>
-        </div>
-      </div>
-      <div class="decree-body">
-        <p class="decree-p" data-i18n="p2p1">After a fair and democratic vote, <strong>DMN Nomashae</strong> is now officially a Democratic MicroNation.</p>
-        <div class="vote-result" data-i18n="p2s1">
-          <span class="vote-for">1/1</span> citizens voted · Vote closed 30 Dec 2025
-        </div>
-        <div class="decree-sig" data-i18n="p2sig">
-          <span class="sig-date">Signed 26 Jan 2026</span>
-          Eftimij Novakovski
-        </div>
-      </div>
-    </div>
-
-  </div><!-- end decrees-wrap -->
-
-
-
-  <footer id="footer"><p data-i18n="footer">© 2026 Nomashae · Powered by the Elements</p></footer>
+  <footer id="footer"><p>© 2026 Nomashae · Powered by the Elements</p></footer>
 
   <button id="topBtn" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"><i class="fa-solid fa-angles-up fa-xl" style="color: var(--ink);"></i></button>
+
+  <!-- Markdown rendering + sanitization -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.5/purify.min.js"></script>
+
+  <!-- FIREBASE -->
+  <script src="firebase-config.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, query, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const app = initializeApp(FIREBASE_CONFIG);
+    const db  = getFirestore(app);
+
+    const CAT_BADGE = {
+      'Announcement': 'badge-press',
+      'Decree': 'badge-decree',
+      'Event': 'badge-active',
+      'Urgent': 'badge-urgent',
+      'Historical Record': 'badge-passed'
+    };
+
+    function escapeHtml(s) {
+      return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    let _allPosts = [];
+
+    function renderDecree(id, d) {
+      const badgeClass = CAT_BADGE[d.category] || 'badge-press';
+      const dt = d.createdAt?.toDate ? d.createdAt.toDate() : null;
+      const date = dt ? dt.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) + ' · ' + dt.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) : 'Recent';
+      const md = d.bodyMarkdown || d.body || '';
+      const html = window.DOMPurify.sanitize(window.marked.parse(md));
+      const img = d.imageUrl ? `<img class="decree-img" src="${d.imageUrl}" alt="">` : '';
+      return `<div class="decree" id="post-${id}" data-cat="${escapeHtml(d.category||'Announcement')}">
+        <div class="decree-header">
+          <div class="decree-title">${escapeHtml(d.title)}</div>
+          <div class="decree-meta">
+            <span class="badge ${badgeClass}">${escapeHtml(d.category||'Announcement')}</span>
+            <span class="date-stamp">${date}</span>
+          </div>
+        </div>
+        <div class="decree-body">
+          ${img}
+          ${html}
+          <div class="decree-sig">
+            <span class="sig-date">Posted ${date}</span>
+            ${escapeHtml(d.author || 'Ministry of Nomashae')}
+          </div>
+        </div>
+      </div>`;
+    }
+
+    function renderList(filter) {
+      const list = document.getElementById('decree-list');
+      const posts = filter === 'all' ? _allPosts : _allPosts.filter(p => (p.data.category || 'Announcement') === filter);
+      if (!posts.length) {
+        list.innerHTML = `<div class="news-empty"><i class="fa-solid fa-satellite-dish"></i><p>No posts in this category yet.</p></div>`;
+        return;
+      }
+      list.innerHTML = posts.map(p => renderDecree(p.id, p.data)).join('');
+    }
+
+    async function loadDecrees() {
+      const list = document.getElementById('decree-list');
+      try {
+        const snap = await getDocs(query(collection(db,'news'), orderBy('createdAt','desc')));
+        _allPosts = [];
+        snap.forEach(doc => _allPosts.push({ id: doc.id, data: doc.data() }));
+        if (!_allPosts.length) {
+          list.innerHTML = `<div class="news-empty"><i class="fa-solid fa-satellite-dish"></i><p>No news posted yet. Check back soon.</p></div>`;
+          return;
+        }
+        renderList('all');
+        // scroll to a specific post if linked via hash
+        if (location.hash) {
+          const target = document.querySelector(location.hash);
+          if (target) setTimeout(() => target.scrollIntoView({behavior:'smooth', block:'start'}), 200);
+        }
+      } catch(e) {
+        list.innerHTML = `<div class="news-empty"><i class="fa-solid fa-triangle-exclamation"></i><p>Could not load decrees. Check your Firebase config.</p></div>`;
+        console.error(e);
+      }
+    }
+
+    document.getElementById('cat-filters').addEventListener('click', e => {
+      const btn = e.target.closest('.cat-filter-btn');
+      if (!btn) return;
+      document.querySelectorAll('.cat-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderList(btn.dataset.cat);
+    });
+
+    loadDecrees();
+  </script>
 
   <script>
     // Element by time
@@ -506,19 +427,10 @@
   <script src="./translations.js"></script>
 
   <script>
-  const topBtn = document.getElementById('topBtn');
-  const footer = document.getElementById('footer');
-
-  window.addEventListener('scroll', () => {
-    const footerTop = footer.getBoundingClientRect().top;
-    const windowHeight = window.innerHeight;
-
-    if (footerTop <= windowHeight) {
-      topBtn.classList.add('visible');
-    } else {
-      topBtn.classList.remove('visible');
-    }
-  });
+    const topBtn = document.getElementById('topBtn');
+    window.addEventListener('scroll', () => {
+      topBtn.classList.toggle('visible', window.scrollY > 400);
+    });
   </script>
 </body>
 </html>
