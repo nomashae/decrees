@@ -89,6 +89,7 @@
       box-shadow: 0 24px 60px rgba(0,0,0,0.25);
       position: relative;
     }
+    .modal.modal-sm { max-width: 420px; }
     .modal-close { position: absolute; top: 1rem; right: 1rem; background: transparent; border: none; font-size: 1.2rem; cursor: pointer; color: var(--ink2); }
     .modal-field { margin-bottom: 0.7rem; display: flex; gap: 0.8rem; }
     .modal-field .mk { font-size: 0.65rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--ink2); min-width: 90px; padding-top: 0.15rem; }
@@ -102,26 +103,6 @@
     .cat-lbl { padding: 0.3rem 0.8rem; border-radius: 20px; border: 1.5px solid var(--border); font-size: 0.68rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--ink2); cursor: pointer; transition: all 0.18s; }
     .cat-opt:checked + .cat-lbl { border-color: var(--accent); background: color-mix(in srgb,var(--accent) 12%,transparent); color: var(--accent); }
 
-    .md-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem; }
-    .md-tabs { display: flex; gap: 0.3rem; }
-    .md-tab {
-      padding: 0.25rem 0.75rem; border-radius: 6px 6px 0 0; border: 1.5px solid var(--border); border-bottom: none;
-      background: var(--bg2); color: var(--ink2); font-size: 0.68rem; font-weight: 600; letter-spacing: 1px;
-      text-transform: uppercase; cursor: pointer;
-    }
-    .md-tab.active { background: var(--card); color: var(--accent); border-color: var(--accent); }
-    #news-body { font-family: 'SFMono-Regular', Consolas, monospace; font-size: 0.85rem; }
-    #news-preview {
-      display: none; min-height: 160px; padding: 0.9rem 1rem; border: 1.5px solid var(--border);
-      border-radius: 10px; background: var(--bg2); font-size: 0.88rem; color: var(--ink);
-    }
-    #news-preview h1, #news-preview h2, #news-preview h3 { font-size: 0.85rem; color: var(--accent); margin: 0.8rem 0 0.3rem; }
-    #news-preview p { margin-bottom: 0.5rem; }
-    #news-preview ul, #news-preview ol { margin-left: 1.2rem; margin-bottom: 0.5rem; }
-    #news-preview img { max-width: 100%; border-radius: 8px; }
-    #news-preview.show { display: block; }
-    #news-body.hide { display: none; }
-
     .img-input-row { display: flex; gap: 0.8rem; flex-wrap: wrap; align-items: flex-start; }
     .img-input-col { flex: 1; min-width: 220px; }
     .img-input-col .or-lbl { font-size: 0.65rem; color: var(--ink2); text-align: center; margin: 0.4rem 0; letter-spacing: 1px; text-transform: uppercase; }
@@ -134,6 +115,86 @@
     }
     .editing-banner.show { display: flex; }
     .editing-banner button { margin-left: auto; }
+
+    /* ── RICH TEXT EDITOR (WordPress-style) ── */
+    .rte-toolbar {
+      display: flex; flex-wrap: wrap; gap: 0.2rem; align-items: center;
+      padding: 0.5rem; background: var(--bg2); border: 1.5px solid var(--border);
+      border-bottom: none; border-radius: 10px 10px 0 0;
+      position: sticky; top: 0; z-index: 5;
+    }
+    .rte-group { display: flex; gap: 0.15rem; padding: 0 0.4rem; border-right: 1px solid var(--border); }
+    .rte-group:last-child { border-right: none; }
+    .rte-btn {
+      width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+      border: none; background: transparent; border-radius: 6px; color: var(--ink2);
+      cursor: pointer; font-size: 0.8rem; transition: all 0.15s;
+    }
+    .rte-btn:hover { background: var(--card); color: var(--ink); }
+    .rte-btn.active { background: var(--accent); color: #fff; }
+    .rte-btn.wide { width: auto; padding: 0 0.6rem; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+
+    #news-body-rte {
+      min-height: 320px; max-height: 620px; overflow-y: auto;
+      padding: 1.2rem 1.3rem; border: 1.5px solid var(--border); border-radius: 0 0 10px 10px;
+      background: var(--card); font-size: 0.92rem; color: var(--ink); line-height: 1.8;
+      outline: none;
+    }
+    #news-body-rte:focus { border-color: var(--accent); }
+    #news-body-rte p { margin-bottom: 0.7rem; }
+    #news-body-rte h2, #news-body-rte h3 {
+      font-size: 0.85rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--accent); margin: 1rem 0 0.5rem;
+    }
+    #news-body-rte ul, #news-body-rte ol { margin: 0.5rem 0 0.8rem 1.3rem; }
+    #news-body-rte blockquote {
+      border-left: 3px solid var(--accent); padding: 0.7rem 1.1rem; background: var(--bg2);
+      border-radius: 0 8px 8px 0; margin: 0.8rem 0; font-style: italic; color: var(--ink2);
+    }
+    #news-body-rte .pullquote {
+      font-size: 1.1rem; font-weight: 500; text-align: center; font-style: italic;
+      margin: 1.2rem 0; padding: 0.8rem 0.5rem; border-top: 2px solid var(--accent); border-bottom: 2px solid var(--accent);
+    }
+    #news-body-rte table { width: 100%; border-collapse: collapse; margin: 0.8rem 0; font-size: 0.85rem; }
+    #news-body-rte table td, #news-body-rte table th { border: 1px solid var(--border); padding: 0.4rem 0.6rem; }
+    #news-body-rte figure { margin: 0.4rem 0 1rem; position: relative; }
+    #news-body-rte figure img { width: 100%; border-radius: 8px; display: block; cursor: pointer; }
+    #news-body-rte figure.selected img { outline: 2px solid var(--accent); outline-offset: 2px; }
+    #news-body-rte figcaption { font-size: 0.72rem; color: var(--ink2); text-align: center; margin-top: 0.4rem; font-style: italic; }
+    #news-body-rte figure.align-left  { float: left; max-width: 45%; margin: 0.3rem 1.2rem 1rem 0; }
+    #news-body-rte figure.align-right { float: right; max-width: 45%; margin: 0.3rem 0 1rem 1.2rem; }
+    #news-body-rte figure.align-center{ margin: 1rem auto; max-width: 100%; }
+    #news-body-rte figure.align-wide  { width: 100%; margin: 1rem 0; }
+    #news-body-rte::after { content:""; display: table; clear: both; }
+    #news-body-rte:empty:before {
+      content: attr(data-placeholder); color: var(--ink2); opacity: 0.6; pointer-events: none;
+    }
+
+    .rte-meta-row { display: flex; justify-content: space-between; margin-top: 0.4rem; font-size: 0.68rem; color: var(--ink2); }
+
+    /* Floating image alignment toolbar */
+    .img-ctx-toolbar {
+      position: absolute; display: none; gap: 0.2rem; background: var(--ink); padding: 0.3rem;
+      border-radius: 8px; box-shadow: 0 6px 18px rgba(0,0,0,0.3); z-index: 50;
+    }
+    .img-ctx-toolbar.show { display: flex; }
+    .img-ctx-toolbar button {
+      width: 28px; height: 28px; border: none; background: transparent; color: #eee;
+      border-radius: 5px; cursor: pointer; font-size: 0.75rem;
+    }
+    .img-ctx-toolbar button:hover { background: rgba(255,255,255,0.15); }
+    .img-ctx-toolbar button.active { background: var(--accent); color: #fff; }
+    .img-ctx-toolbar .sep { width: 1px; background: rgba(255,255,255,0.2); margin: 4px 2px; }
+
+    /* Image insert modal */
+    .align-choice { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.4rem; }
+    .align-choice label {
+      flex: 1; min-width: 70px; text-align: center; padding: 0.5rem 0.4rem; border: 1.5px solid var(--border);
+      border-radius: 8px; font-size: 0.68rem; color: var(--ink2); cursor: pointer; transition: all 0.15s;
+    }
+    .align-choice input { display: none; }
+    .align-choice input:checked + label { border-color: var(--accent); background: color-mix(in srgb,var(--accent) 12%,transparent); color: var(--accent); }
+    .align-choice i { display: block; margin-bottom: 0.3rem; font-size: 0.9rem; }
 
     /* ── NEWS LIST (admin) ── */
     .news-admin-row {
@@ -155,6 +216,7 @@
       .admin-wrap { grid-template-columns: 1fr; }
       .admin-sidebar { display: none; }
       .admin-main { padding: 1.2rem; }
+      .rte-toolbar { position: static; }
     }
   </style>
 </head>
@@ -281,7 +343,7 @@
           </div>
 
           <div class="form-field">
-            <label>Cover Image <span class="opt">(optional — upload or paste a URL)</span></label>
+            <label>Featured Image <span class="opt">(optional — shown at the top of the post, upload or paste a URL)</span></label>
             <div class="img-input-row">
               <div class="img-input-col">
                 <input type="file" id="news-image-file" accept="image/*"/>
@@ -296,15 +358,42 @@
           </div>
 
           <div class="form-field">
-            <label>Body <span class="req">★</span> <span class="opt">(Markdown: **bold**, # heading, - list, [link](url))</span></label>
-            <div class="md-toolbar">
-              <div class="md-tabs">
-                <button type="button" class="md-tab active" id="tab-write" onclick="setMdTab('write')">Write</button>
-                <button type="button" class="md-tab" id="tab-preview" onclick="setMdTab('preview')">Preview</button>
+            <label>Body <span class="req">★</span> <span class="opt">(rich text — format, embed images and tables directly)</span></label>
+
+            <div class="rte-toolbar" id="rte-toolbar">
+              <div class="rte-group">
+                <button type="button" class="rte-btn" data-cmd="bold" title="Bold"><i class="fa-solid fa-bold"></i></button>
+                <button type="button" class="rte-btn" data-cmd="italic" title="Italic"><i class="fa-solid fa-italic"></i></button>
+                <button type="button" class="rte-btn" data-cmd="underline" title="Underline"><i class="fa-solid fa-underline"></i></button>
+                <button type="button" class="rte-btn" data-cmd="strikeThrough" title="Strikethrough"><i class="fa-solid fa-strikethrough"></i></button>
+              </div>
+              <div class="rte-group">
+                <button type="button" class="rte-btn" data-block="P" title="Paragraph"><i class="fa-solid fa-paragraph"></i></button>
+                <button type="button" class="rte-btn" data-block="H2" title="Heading 2">H2</button>
+                <button type="button" class="rte-btn" data-block="H3" title="Heading 3">H3</button>
+                <button type="button" class="rte-btn" data-block="BLOCKQUOTE" title="Quote"><i class="fa-solid fa-quote-left"></i></button>
+                <button type="button" class="rte-btn" id="btn-pullquote" title="Pull quote"><i class="fa-solid fa-align-center"></i></button>
+              </div>
+              <div class="rte-group">
+                <button type="button" class="rte-btn" data-cmd="insertUnorderedList" title="Bullet list"><i class="fa-solid fa-list-ul"></i></button>
+                <button type="button" class="rte-btn" data-cmd="insertOrderedList" title="Numbered list"><i class="fa-solid fa-list-ol"></i></button>
+              </div>
+              <div class="rte-group">
+                <button type="button" class="rte-btn" id="btn-link" title="Insert link"><i class="fa-solid fa-link"></i></button>
+                <button type="button" class="rte-btn" data-cmd="unlink" title="Remove link"><i class="fa-solid fa-link-slash"></i></button>
+                <button type="button" class="rte-btn" id="btn-image" title="Insert image"><i class="fa-solid fa-image"></i></button>
+                <button type="button" class="rte-btn" id="btn-table" title="Insert table"><i class="fa-solid fa-table"></i></button>
+                <button type="button" class="rte-btn" data-cmd="insertHorizontalRule" title="Divider"><i class="fa-solid fa-minus"></i></button>
+              </div>
+              <div class="rte-group">
+                <button type="button" class="rte-btn" data-cmd="removeFormat" title="Clear formatting"><i class="fa-solid fa-eraser"></i></button>
               </div>
             </div>
-            <textarea id="news-body" rows="10" placeholder="## Heading&#10;&#10;Full text of the announcement or decree, in **Markdown**…"></textarea>
-            <div id="news-preview"></div>
+            <div id="news-body-rte" contenteditable="true" data-placeholder="Write the full text of the announcement or decree here. Use the toolbar to add headings, images, quotes and more…"></div>
+            <div class="rte-meta-row">
+              <span id="word-count">0 words</span>
+              <span id="rte-reading-time">~1 min read</span>
+            </div>
           </div>
 
           <div class="form-field">
@@ -336,10 +425,65 @@
   </div>
 </div>
 
+<!-- IMAGE INSERT MODAL -->
+<div class="modal-overlay" id="img-modal">
+  <div class="modal modal-sm">
+    <button class="modal-close" onclick="closeImgModal()">✕</button>
+    <p class="section-label"><i class="fa-solid fa-image" style="margin-right:0.4rem"></i>Insert Image</p>
+    <div class="img-input-row">
+      <div class="img-input-col">
+        <input type="file" id="rte-image-file" accept="image/*"/>
+        <div class="field-hint"><i class="fa-solid fa-circle-info"></i> Uploaded to Firebase Storage.</div>
+      </div>
+      <div class="img-input-col">
+        <input type="text" id="rte-image-url" placeholder="https://example.com/image.jpg"/>
+        <div class="field-hint"><i class="fa-solid fa-circle-info"></i> Or paste an image URL.</div>
+      </div>
+    </div>
+    <img id="rte-image-preview" style="max-width:100%;max-height:160px;border-radius:8px;margin-top:0.6rem;display:none;object-fit:cover"/>
+
+    <div class="form-field" style="margin-top:1rem">
+      <label>Alignment <span class="opt">(how text wraps around the image)</span></label>
+      <div class="align-choice">
+        <input type="radio" name="rte-align" id="al-none" value="none">
+        <label for="al-none"><i class="fa-solid fa-square"></i>None</label>
+        <input type="radio" name="rte-align" id="al-left" value="align-left">
+        <label for="al-left"><i class="fa-solid fa-align-left"></i>Left</label>
+        <input type="radio" name="rte-align" id="al-center" value="align-center" checked>
+        <label for="al-center"><i class="fa-solid fa-align-center"></i>Center</label>
+        <input type="radio" name="rte-align" id="al-right" value="align-right">
+        <label for="al-right"><i class="fa-solid fa-align-right"></i>Right</label>
+        <input type="radio" name="rte-align" id="al-wide" value="align-wide">
+        <label for="al-wide"><i class="fa-solid fa-expand"></i>Wide</label>
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label>Caption <span class="opt">(optional)</span></label>
+      <input type="text" id="rte-image-caption" placeholder="Caption shown beneath the image"/>
+    </div>
+
+    <button class="btn-primary" style="width:100%;justify-content:center;margin-top:0.8rem" id="rte-image-insert-btn">
+      <i class="fa-solid fa-plus"></i> Insert Image
+    </button>
+  </div>
+</div>
+
+<!-- Floating alignment toolbar for images already in the editor -->
+<div class="img-ctx-toolbar" id="img-ctx-toolbar">
+  <button type="button" data-align="none" title="No wrap"><i class="fa-solid fa-square"></i></button>
+  <button type="button" data-align="align-left" title="Wrap left"><i class="fa-solid fa-align-left"></i></button>
+  <button type="button" data-align="align-center" title="Center"><i class="fa-solid fa-align-center"></i></button>
+  <button type="button" data-align="align-right" title="Wrap right"><i class="fa-solid fa-align-right"></i></button>
+  <button type="button" data-align="align-wide" title="Wide"><i class="fa-solid fa-expand"></i></button>
+  <div class="sep"></div>
+  <button type="button" id="img-ctx-caption" title="Edit caption"><i class="fa-solid fa-closed-captioning"></i></button>
+  <button type="button" id="img-ctx-remove" title="Remove image"><i class="fa-solid fa-trash"></i></button>
+</div>
+
 <div id="toast"><i class="fa-solid fa-circle-check"></i><span id="toast-msg"></span></div>
 
-<!-- Markdown rendering -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<!-- Sanitization for anything rendered back into the page -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.5/purify.min.js"></script>
 
 <script src="firebase-config.js"></script>
@@ -550,15 +694,17 @@
   // ── POST / EDIT NEWS ──
   let _editingId = null;
   let _allNews = [];
-  let _pendingImageFile = null;
+  let _pendingImageFile = null; // featured image
 
   window.postNews = async function() {
     const title  = document.getElementById('news-title').value.trim();
-    const body   = document.getElementById('news-body').value.trim();
+    const rte    = document.getElementById('news-body-rte');
+    const bodyHtml = window.DOMPurify.sanitize(rte.innerHTML, { ADD_TAGS: ['figure','figcaption'], ADD_ATTR: ['class'] }).trim();
     const author = document.getElementById('news-author').value.trim() || 'Ministry of Nomashae';
     const cat    = document.querySelector('input[name="cat"]:checked')?.value || 'Announcement';
     const urlVal = document.getElementById('news-image-url').value.trim();
-    if (!title || !body) { showToast('Headline and body are required.'); return; }
+    const plain  = rte.textContent.trim();
+    if (!title || !plain) { showToast('Headline and body are required.'); return; }
 
     const btn = document.getElementById('publish-btn');
     btn.disabled = true;
@@ -573,7 +719,7 @@
         imageUrl = await window._getDownloadURL(sref);
       }
 
-      const payload = { title, bodyMarkdown: body, author, category: cat, imageUrl };
+      const payload = { title, bodyHtml, author, category: cat, imageUrl };
 
       if (_editingId) {
         payload.updatedAt = window._serverTimestamp();
@@ -600,7 +746,7 @@
     _editingId = null;
     _pendingImageFile = null;
     document.getElementById('news-title').value = '';
-    document.getElementById('news-body').value  = '';
+    document.getElementById('news-body-rte').innerHTML = '';
     document.getElementById('news-author').value= '';
     document.getElementById('news-image-url').value = '';
     document.getElementById('news-image-file').value = '';
@@ -608,7 +754,7 @@
     document.getElementById('cat-ann').checked = true;
     document.getElementById('editing-banner').classList.remove('show');
     document.getElementById('publish-btn').innerHTML = '<i class="fa-solid fa-paper-plane"></i> Publish';
-    setMdTab('write');
+    window.updateRteMeta();
   }
 
   window.cancelEdit = function() { resetNewsForm(); };
@@ -620,7 +766,9 @@
     _editingId = docId;
     _pendingImageFile = null;
     document.getElementById('news-title').value = d.title || '';
-    document.getElementById('news-body').value  = d.bodyMarkdown || d.body || '';
+    document.getElementById('news-body-rte').innerHTML = window.DOMPurify.sanitize(
+      d.bodyHtml || d.bodyMarkdown || d.body || '', { ADD_TAGS: ['figure','figcaption'], ADD_ATTR: ['class'] }
+    );
     document.getElementById('news-author').value= d.author || '';
     document.getElementById('news-image-url').value = d.imageUrl || '';
     document.getElementById('news-image-file').value = '';
@@ -630,7 +778,7 @@
     document.getElementById('editing-banner').classList.add('show');
     document.getElementById('publish-btn').innerHTML = '<i class="fa-solid fa-paper-plane"></i> Update';
     showView('news');
-    setMdTab('write');
+    window.updateRteMeta();
     window.scrollTo({top:0, behavior:'smooth'});
   };
 
@@ -671,7 +819,7 @@
     } catch(e) { showToast('Error: ' + e.message); }
   };
 
-  // ── IMAGE INPUT HANDLING ──
+  // ── FEATURED IMAGE INPUT HANDLING ──
   document.getElementById('news-image-file').addEventListener('change', e => {
     const file = e.target.files[0];
     const prev = document.getElementById('news-image-preview');
@@ -695,24 +843,12 @@
     }
   });
 
-  // ── MARKDOWN WRITE/PREVIEW TABS ──
-  window.setMdTab = function(tab) {
-    const writeTab = document.getElementById('tab-write');
-    const previewTab = document.getElementById('tab-preview');
-    const body = document.getElementById('news-body');
-    const preview = document.getElementById('news-preview');
-    if (tab === 'preview') {
-      preview.innerHTML = window.DOMPurify.sanitize(window.marked.parse(body.value || '*Nothing to preview yet.*'));
-      body.classList.add('hide');
-      preview.classList.add('show');
-      writeTab.classList.remove('active');
-      previewTab.classList.add('active');
-    } else {
-      body.classList.remove('hide');
-      preview.classList.remove('show');
-      writeTab.classList.add('active');
-      previewTab.classList.remove('active');
-    }
+  // ── INLINE (RTE) IMAGE UPLOAD, exposed for the toolbar script below ──
+  window._uploadRteImage = async function(file) {
+    const path = `news-images/inline_${Date.now()}_${file.name}`;
+    const sref = window._storageRef(window._storage, path);
+    await window._uploadBytes(sref, file);
+    return await window._getDownloadURL(sref);
   };
 </script>
 
@@ -734,7 +870,8 @@
 
   // Enter key on login
   document.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && document.getElementById('login-screen').style.display !== 'none') doLogin();
+    if (e.key === 'Enter' && document.getElementById('login-screen').style.display !== 'none'
+        && document.activeElement && document.activeElement.id !== 'news-body-rte') doLogin();
   });
 
   // Dark mode
@@ -753,6 +890,239 @@
   // Element theme
   function getEl() { const h=new Date().getHours(); return h>=6&&h<12?'air':h>=12&&h<18?'water':h>=18&&h<22?'fire':'earth'; }
   document.body.setAttribute('data-element', getEl());
+</script>
+
+<!-- ── RICH TEXT EDITOR ENGINE (WordPress-style toolbar, image alignment) ── -->
+<script>
+(function() {
+  const rte = document.getElementById('news-body-rte');
+  let savedRange = null;
+
+  function saveSelection() {
+    const sel = window.getSelection();
+    if (sel && sel.rangeCount > 0 && rte.contains(sel.anchorNode)) {
+      savedRange = sel.getRangeAt(0).cloneRange();
+    }
+  }
+  function restoreSelection() {
+    if (!savedRange) return;
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(savedRange);
+  }
+
+  rte.addEventListener('mouseup', saveSelection);
+  rte.addEventListener('keyup', saveSelection);
+
+  // Word count / reading time
+  window.updateRteMeta = function() {
+    const text = rte.textContent.trim();
+    const words = text ? text.split(/\s+/).filter(Boolean).length : 0;
+    document.getElementById('word-count').textContent = `${words} word${words===1?'':'s'}`;
+    document.getElementById('rte-reading-time').textContent = `~${Math.max(1, Math.round(words/200))} min read`;
+  };
+  rte.addEventListener('input', window.updateRteMeta);
+  window.updateRteMeta();
+
+  // ── Simple execCommand-backed buttons (bold/italic/lists/etc) ──
+  document.querySelectorAll('.rte-btn[data-cmd]').forEach(btn => {
+    btn.addEventListener('mousedown', e => e.preventDefault()); // keep selection
+    btn.addEventListener('click', () => {
+      rte.focus();
+      document.execCommand(btn.dataset.cmd, false, null);
+      window.updateRteMeta();
+    });
+  });
+
+  // ── Block format buttons (paragraph / H2 / H3 / blockquote) ──
+  document.querySelectorAll('.rte-btn[data-block]').forEach(btn => {
+    btn.addEventListener('mousedown', e => e.preventDefault());
+    btn.addEventListener('click', () => {
+      rte.focus();
+      document.execCommand('formatBlock', false, btn.dataset.block);
+    });
+  });
+
+  // ── Pull quote: wrap the current selection/paragraph in <p class="pullquote"> ──
+  document.getElementById('btn-pullquote').addEventListener('mousedown', e => e.preventDefault());
+  document.getElementById('btn-pullquote').addEventListener('click', () => {
+    rte.focus();
+    const sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0 || sel.isCollapsed) {
+      document.execCommand('insertHTML', false, '<p class="pullquote">Pull quote text…</p>');
+      return;
+    }
+    const text = sel.toString();
+    document.execCommand('insertHTML', false, `<p class="pullquote">${text.replace(/</g,'&lt;')}</p>`);
+  });
+
+  // ── Link insert ──
+  document.getElementById('btn-link').addEventListener('mousedown', e => e.preventDefault());
+  document.getElementById('btn-link').addEventListener('click', () => {
+    rte.focus();
+    const url = prompt('Link URL:', 'https://');
+    if (url) document.execCommand('createLink', false, url);
+  });
+
+  // ── Table insert ──
+  document.getElementById('btn-table').addEventListener('mousedown', e => e.preventDefault());
+  document.getElementById('btn-table').addEventListener('click', () => {
+    rte.focus();
+    restoreSelection();
+    const tableHtml = `<table><tbody>
+      <tr><th>Column 1</th><th>Column 2</th></tr>
+      <tr><td>Row 1</td><td>Row 1</td></tr>
+      <tr><td>Row 2</td><td>Row 2</td></tr>
+    </tbody></table><p><br></p>`;
+    document.execCommand('insertHTML', false, tableHtml);
+  });
+
+  // ── IMAGE INSERT MODAL ──
+  const imgModal      = document.getElementById('img-modal');
+  const imgFileInput  = document.getElementById('rte-image-file');
+  const imgUrlInput   = document.getElementById('rte-image-url');
+  const imgPreview    = document.getElementById('rte-image-preview');
+  const imgCaption    = document.getElementById('rte-image-caption');
+  const imgInsertBtn  = document.getElementById('rte-image-insert-btn');
+  let _rtePendingFile = null;
+
+  document.getElementById('btn-image').addEventListener('mousedown', e => e.preventDefault());
+  document.getElementById('btn-image').addEventListener('click', () => {
+    saveSelection();
+    imgFileInput.value = ''; imgUrlInput.value = ''; imgCaption.value = '';
+    imgPreview.style.display = 'none'; _rtePendingFile = null;
+    document.getElementById('al-center').checked = true;
+    imgModal.classList.add('open');
+  });
+  window.closeImgModal = function() { imgModal.classList.remove('open'); };
+  imgModal.addEventListener('click', e => { if (e.target === imgModal) closeImgModal(); });
+
+  imgFileInput.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (file) {
+      _rtePendingFile = file;
+      imgUrlInput.value = '';
+      imgPreview.src = URL.createObjectURL(file);
+      imgPreview.style.display = 'block';
+    }
+  });
+  imgUrlInput.addEventListener('input', () => {
+    const val = imgUrlInput.value.trim();
+    if (val) {
+      _rtePendingFile = null;
+      imgFileInput.value = '';
+      imgPreview.src = val;
+      imgPreview.style.display = 'block';
+    } else if (!_rtePendingFile) {
+      imgPreview.style.display = 'none';
+    }
+  });
+
+  imgInsertBtn.addEventListener('click', async () => {
+    const align = document.querySelector('input[name="rte-align"]:checked')?.value || 'none';
+    const caption = imgCaption.value.trim();
+    let src = imgUrlInput.value.trim();
+
+    if (!src && !_rtePendingFile) { showToastLocal('Choose a file or paste an image URL.'); return; }
+
+    imgInsertBtn.disabled = true;
+    imgInsertBtn.innerHTML = '<div class="spinner"></div> Inserting…';
+    try {
+      if (_rtePendingFile) {
+        if (!window._uploadRteImage) throw new Error('Upload not ready yet — try again in a moment.');
+        src = await window._uploadRteImage(_rtePendingFile);
+      }
+      const alignClass = align === 'none' ? '' : ` align-${align.replace('align-','')}`;
+      const figureHtml = `<figure class="${alignClass.trim()}" contenteditable="false">` +
+        `<img src="${src}" alt="${caption.replace(/"/g,'&quot;')}">` +
+        (caption ? `<figcaption>${caption.replace(/</g,'&lt;')}</figcaption>` : '') +
+        `</figure><p><br></p>`;
+      rte.focus();
+      restoreSelection();
+      document.execCommand('insertHTML', false, figureHtml);
+      window.updateRteMeta();
+      closeImgModal();
+    } catch (err) {
+      showToastLocal('Error inserting image: ' + err.message);
+    } finally {
+      imgInsertBtn.disabled = false;
+      imgInsertBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Insert Image';
+    }
+  });
+
+  function showToastLocal(msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+
+  // ── FLOATING ALIGNMENT TOOLBAR FOR EXISTING INLINE IMAGES ──
+  const ctxToolbar = document.getElementById('img-ctx-toolbar');
+  let ctxFigure = null;
+
+  function showCtxToolbar(figure) {
+    ctxFigure = figure;
+    document.querySelectorAll('#news-body-rte figure').forEach(f => f.classList.remove('selected'));
+    figure.classList.add('selected');
+    const rect = figure.getBoundingClientRect();
+    ctxToolbar.style.top  = (window.scrollY + rect.top - 42) + 'px';
+    ctxToolbar.style.left = (window.scrollX + rect.left) + 'px';
+    ctxToolbar.classList.add('show');
+    ctxToolbar.querySelectorAll('[data-align]').forEach(b => {
+      const cls = b.dataset.align;
+      const isActive = (cls === 'none' && !figure.className) || figure.classList.contains(cls);
+      b.classList.toggle('active', isActive);
+    });
+  }
+  function hideCtxToolbar() {
+    ctxToolbar.classList.remove('show');
+    if (ctxFigure) ctxFigure.classList.remove('selected');
+    ctxFigure = null;
+  }
+
+  rte.addEventListener('click', e => {
+    const img = e.target.closest('img');
+    if (img && img.closest('figure')) {
+      showCtxToolbar(img.closest('figure'));
+    } else {
+      hideCtxToolbar();
+    }
+  });
+  document.addEventListener('click', e => {
+    if (!ctxToolbar.contains(e.target) && !e.target.closest('#news-body-rte figure')) hideCtxToolbar();
+  });
+
+  ctxToolbar.querySelectorAll('[data-align]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (!ctxFigure) return;
+      ctxFigure.className = btn.dataset.align === 'none' ? '' : btn.dataset.align;
+      showCtxToolbar(ctxFigure);
+      window.updateRteMeta();
+    });
+  });
+  document.getElementById('img-ctx-caption').addEventListener('click', () => {
+    if (!ctxFigure) return;
+    let cap = ctxFigure.querySelector('figcaption');
+    const current = cap ? cap.textContent : '';
+    const next = prompt('Caption:', current);
+    if (next === null) return;
+    if (!cap && next.trim()) {
+      cap = document.createElement('figcaption');
+      ctxFigure.appendChild(cap);
+    }
+    if (cap) {
+      if (next.trim()) { cap.textContent = next.trim(); }
+      else { cap.remove(); }
+    }
+  });
+  document.getElementById('img-ctx-remove').addEventListener('click', () => {
+    if (!ctxFigure) return;
+    ctxFigure.remove();
+    hideCtxToolbar();
+    window.updateRteMeta();
+  });
+})();
 </script>
 </body>
 </html>
