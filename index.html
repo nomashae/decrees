@@ -104,6 +104,26 @@
       padding: 4rem 2rem 5rem;
     }
 
+    /* SEARCH */
+    .search-bar {
+      display: flex; align-items: center; gap: 0.7rem;
+      background: var(--card); border: 1.5px solid var(--border);
+      border-radius: 10px; padding: 0.65rem 1.1rem; margin-bottom: 1.2rem;
+      transition: border-color 0.2s, background var(--t);
+    }
+    .search-bar:focus-within { border-color: var(--accent); }
+    .search-bar i { color: var(--ink2); flex-shrink: 0; }
+    .search-bar input {
+      border: none; background: transparent; outline: none; flex: 1;
+      font-family: 'Outfit', sans-serif; font-size: 0.85rem; color: var(--ink);
+    }
+    .search-bar input::placeholder { color: var(--ink2); }
+    .search-clear {
+      border: none; background: transparent; color: var(--ink2); cursor: pointer;
+      font-size: 0.85rem; padding: 0.15rem; display: none;
+    }
+    .search-clear.show { display: block; }
+
     /* FILTER BAR */
     .cat-filters { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem; }
     .cat-filter-btn {
@@ -112,6 +132,8 @@
       letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.18s;
     }
     .cat-filter-btn:hover, .cat-filter-btn.active { border-color: var(--accent); background: color-mix(in srgb,var(--accent) 10%,transparent); color: var(--accent); }
+
+    .result-count { font-size: 0.72rem; color: var(--ink2); margin: -1.2rem 0 1.6rem; }
 
     /* DECREE CARD */
     .decree {
@@ -172,9 +194,33 @@
       font-size: 0.65rem; color: var(--ink2); font-weight: 400;
       letter-spacing: 1px; transition: color var(--t);
     }
+    .reading-time {
+      font-size: 0.63rem; color: var(--ink2); display: flex; align-items: center; gap: 0.3rem;
+    }
 
     .decree-body { font-size: 0.92rem; font-weight: 300; color: var(--ink2); line-height: 1.85; transition: color var(--t); }
-    /* Markdown-rendered content inside the body */
+
+    /* Content-area (collapsible) */
+    .decree-content-inner { position: relative; overflow: hidden; transition: max-height 0.45s ease; }
+    .decree-content-inner::after { content: ""; display: table; clear: both; }
+    .decree-fade {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 74px;
+      background: linear-gradient(to bottom, transparent, var(--card));
+      pointer-events: none; opacity: 1; transition: opacity 0.3s;
+    }
+    .decree.expanded .decree-fade { opacity: 0; }
+    .read-more-btn {
+      display: inline-flex; align-items: center; gap: 0.45rem; margin-top: 1.2rem;
+      background: none; border: 1.5px solid var(--accent); color: var(--accent);
+      padding: 0.55rem 1.2rem; border-radius: 8px; font-family: 'Outfit', sans-serif;
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .read-more-btn:hover { background: var(--accent); color: #fff; }
+    .read-more-btn i { transition: transform 0.3s; font-size: 0.65rem; }
+    .decree.expanded .read-more-btn i { transform: rotate(180deg); }
+
+    /* Rich content blocks — rendered inside .decree-content-inner */
     .decree-body h1, .decree-body h2, .decree-body h3 {
       font-size: 0.78rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
       color: var(--accent); margin: 1.2rem 0 0.5rem; transition: color var(--t);
@@ -183,13 +229,35 @@
     .decree-body ul, .decree-body ol { margin: 0.5rem 0 0.9rem 1.3rem; color: var(--ink); }
     .decree-body li { margin-bottom: 0.3rem; }
     .decree-body a { color: var(--accent); }
-    .decree-body strong { color: var(--ink); font-weight: 600; }
+    .decree-body strong, .decree-body b { color: var(--ink); font-weight: 600; }
     .decree-body blockquote {
       border-left: 3px solid var(--accent); padding: 0.8rem 1.2rem;
       background: var(--bg2); border-radius: 0 8px 8px 0;
       margin: 1rem 0; font-style: italic; font-size: 0.9rem; color: var(--ink2);
     }
     .decree-body code { background: var(--bg2); padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.85em; }
+    .decree-body hr { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+
+    .decree-body .pullquote {
+      font-size: 1.2rem; font-weight: 500; color: var(--ink); font-style: italic;
+      text-align: center; margin: 1.8rem 0; padding: 1.1rem 0.5rem;
+      border-top: 2px solid var(--accent); border-bottom: 2px solid var(--accent);
+    }
+
+    .decree-body table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.85rem; }
+    .decree-body table th, .decree-body table td { border: 1px solid var(--border); padding: 0.5rem 0.7rem; text-align: left; color: var(--ink); }
+    .decree-body table th { background: var(--bg2); font-weight: 600; }
+
+    .decree-body figure { margin: 0.4rem 0 1.1rem; }
+    .decree-body figure img { width: 100%; border-radius: 10px; display: block; margin: 0; }
+    .decree-body figcaption {
+      font-size: 0.72rem; color: var(--ink2); text-align: center;
+      margin-top: 0.5rem; font-style: italic; line-height: 1.4;
+    }
+    .decree-body figure.align-left  { float: left; max-width: 45%; margin: 0.3rem 1.4rem 1rem 0; }
+    .decree-body figure.align-right { float: right; max-width: 45%; margin: 0.3rem 0 1rem 1.4rem; }
+    .decree-body figure.align-center{ margin: 1.4rem auto; max-width: 100%; }
+    .decree-body figure.align-wide  { width: 100%; margin: 1.4rem 0; }
     .decree-body img { max-width: 100%; border-radius: 8px; margin: 0.6rem 0; }
 
     .decree-sig {
@@ -198,6 +266,7 @@
       text-align: right; font-style: italic;
       font-size: 0.85rem; font-weight: 500;
       color: var(--accent); transition: color var(--t), border-color var(--t);
+      clear: both;
     }
     .decree-sig .sig-date {
       display: block; font-size: 0.72rem; font-weight: 300;
@@ -240,6 +309,8 @@
       .decrees-wrap { padding: 2.5rem 1.2rem; }
       .decree-header { flex-direction: column; }
       .decree-meta { align-items: flex-start; }
+      .decree-body figure.align-left,
+      .decree-body figure.align-right { float: none; max-width: 100%; margin: 0.6rem 0 1rem; }
     }
 
     .decree_link { text-decoration: none; color: var(--accent); }
@@ -279,6 +350,12 @@
   </div>
 
   <div class="decrees-wrap">
+    <div class="search-bar">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="search-input" placeholder="Search decrees and news…" autocomplete="off"/>
+      <button class="search-clear" id="search-clear"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
     <div class="cat-filters" id="cat-filters">
       <button class="cat-filter-btn active" data-cat="all">All</button>
       <button class="cat-filter-btn" data-cat="Announcement">Announcement</button>
@@ -287,6 +364,8 @@
       <button class="cat-filter-btn" data-cat="Urgent">Urgent</button>
       <button class="cat-filter-btn" data-cat="Historical Record">Historical Record</button>
     </div>
+
+    <p class="result-count" id="result-count"></p>
 
     <div id="decree-list">
       <div class="news-empty">
@@ -300,7 +379,7 @@
 
   <button id="topBtn" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"><i class="fa-solid fa-angles-up fa-xl" style="color: var(--ink);"></i></button>
 
-  <!-- Markdown rendering + sanitization -->
+  <!-- Markdown rendering + sanitization (legacy posts) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.5/purify.min.js"></script>
 
@@ -321,18 +400,40 @@
       'Historical Record': 'badge-passed'
     };
 
+    const COLLAPSE_HEIGHT = 280; // px — teaser height before "Read more"
+    const SANITIZE_OPTS = { ADD_TAGS: ['figure','figcaption'], ADD_ATTR: ['class'] };
+
     function escapeHtml(s) {
       return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     }
 
+    function stripHtml(html) {
+      const tmp = document.createElement('div');
+      tmp.innerHTML = html;
+      return (tmp.textContent || tmp.innerText || '').replace(/\s+/g, ' ').trim();
+    }
+
+    function readingTime(plainText) {
+      const words = plainText ? plainText.split(' ').filter(Boolean).length : 0;
+      const mins = Math.max(1, Math.round(words / 200));
+      return `${mins} min read`;
+    }
+
     let _allPosts = [];
+
+    function bodyHtmlFor(d) {
+      // Prefer the new rich-text field; fall back to legacy Markdown field.
+      if (d.bodyHtml) return window.DOMPurify.sanitize(d.bodyHtml, SANITIZE_OPTS);
+      const md = d.bodyMarkdown || d.body || '';
+      return window.DOMPurify.sanitize(window.marked.parse(md), SANITIZE_OPTS);
+    }
 
     function renderDecree(id, d) {
       const badgeClass = CAT_BADGE[d.category] || 'badge-press';
       const dt = d.createdAt?.toDate ? d.createdAt.toDate() : null;
       const date = dt ? dt.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) + ' · ' + dt.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) : 'Recent';
-      const md = d.bodyMarkdown || d.body || '';
-      const html = window.DOMPurify.sanitize(window.marked.parse(md));
+      const html = bodyHtmlFor(d);
+      const plain = stripHtml(html);
       const img = d.imageUrl ? `<img class="decree-img" src="${d.imageUrl}" alt="">` : '';
       return `<div class="decree" id="post-${id}" data-cat="${escapeHtml(d.category||'Announcement')}">
         <div class="decree-header">
@@ -340,27 +441,85 @@
           <div class="decree-meta">
             <span class="badge ${badgeClass}">${escapeHtml(d.category||'Announcement')}</span>
             <span class="date-stamp">${date}</span>
+            <span class="reading-time"><i class="fa-regular fa-clock"></i>${readingTime(plain)}</span>
           </div>
         </div>
         <div class="decree-body">
           ${img}
-          ${html}
-          <div class="decree-sig">
-            <span class="sig-date">Posted ${date}</span>
-            ${escapeHtml(d.author || 'Ministry of Nomashae')}
+          <div class="decree-content-inner collapsed" style="max-height:${COLLAPSE_HEIGHT}px">
+            ${html}
+            <div class="decree-sig">
+              <span class="sig-date">Posted ${date}</span>
+              ${escapeHtml(d.author || 'Ministry of Nomashae')}
+            </div>
           </div>
+          <div class="decree-fade"></div>
+          <button class="read-more-btn" type="button">
+            <span class="rm-label">Read Full ${escapeHtml(d.category || 'Post')}</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
         </div>
       </div>`;
     }
 
-    function renderList(filter) {
+    function wireUpCollapsibles(root) {
+      root.querySelectorAll('.decree').forEach(card => {
+        const inner = card.querySelector('.decree-content-inner');
+        const btn = card.querySelector('.read-more-btn');
+        const label = btn.querySelector('.rm-label');
+        const catWord = card.dataset.cat || 'Post';
+
+        // If content already fits within the teaser height, no need for the control.
+        if (inner.scrollHeight <= COLLAPSE_HEIGHT + 8) {
+          inner.classList.remove('collapsed');
+          inner.style.maxHeight = 'none';
+          btn.style.display = 'none';
+          card.querySelector('.decree-fade').style.display = 'none';
+          return;
+        }
+
+        btn.addEventListener('click', () => {
+          const expanded = card.classList.toggle('expanded');
+          if (expanded) {
+            inner.style.maxHeight = inner.scrollHeight + 'px';
+            inner.classList.remove('collapsed');
+            label.textContent = 'Show Less';
+          } else {
+            inner.style.maxHeight = COLLAPSE_HEIGHT + 'px';
+            inner.classList.add('collapsed');
+            label.textContent = `Read Full ${catWord}`;
+            card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
+    }
+
+    function currentFilters() {
+      const activeBtn = document.querySelector('.cat-filter-btn.active');
+      const cat = activeBtn ? activeBtn.dataset.cat : 'all';
+      const q = document.getElementById('search-input').value.trim().toLowerCase();
+      return { cat, q };
+    }
+
+    function renderList() {
+      const { cat, q } = currentFilters();
       const list = document.getElementById('decree-list');
-      const posts = filter === 'all' ? _allPosts : _allPosts.filter(p => (p.data.category || 'Announcement') === filter);
+      let posts = cat === 'all' ? _allPosts : _allPosts.filter(p => (p.data.category || 'Announcement') === cat);
+      if (q) {
+        posts = posts.filter(p => {
+          const hay = (p.data.title || '') + ' ' + stripHtml(bodyHtmlFor(p.data));
+          return hay.toLowerCase().includes(q);
+        });
+      }
+      document.getElementById('result-count').textContent = q || cat !== 'all'
+        ? `${posts.length} result${posts.length===1?'':'s'} found`
+        : '';
       if (!posts.length) {
-        list.innerHTML = `<div class="news-empty"><i class="fa-solid fa-satellite-dish"></i><p>No posts in this category yet.</p></div>`;
+        list.innerHTML = `<div class="news-empty"><i class="fa-solid fa-satellite-dish"></i><p>No posts match your search.</p></div>`;
         return;
       }
       list.innerHTML = posts.map(p => renderDecree(p.id, p.data)).join('');
+      wireUpCollapsibles(list);
     }
 
     async function loadDecrees() {
@@ -373,11 +532,21 @@
           list.innerHTML = `<div class="news-empty"><i class="fa-solid fa-satellite-dish"></i><p>No news posted yet. Check back soon.</p></div>`;
           return;
         }
-        renderList('all');
-        // scroll to a specific post if linked via hash
+        renderList();
+        // scroll to (and expand) a specific post if linked via hash
         if (location.hash) {
           const target = document.querySelector(location.hash);
-          if (target) setTimeout(() => target.scrollIntoView({behavior:'smooth', block:'start'}), 200);
+          if (target) {
+            const inner = target.querySelector('.decree-content-inner');
+            const btn = target.querySelector('.read-more-btn');
+            if (inner && btn && btn.style.display !== 'none') {
+              target.classList.add('expanded');
+              inner.classList.remove('collapsed');
+              inner.style.maxHeight = inner.scrollHeight + 'px';
+              btn.querySelector('.rm-label').textContent = 'Show Less';
+            }
+            setTimeout(() => target.scrollIntoView({behavior:'smooth', block:'start'}), 200);
+          }
         }
       } catch(e) {
         list.innerHTML = `<div class="news-empty"><i class="fa-solid fa-triangle-exclamation"></i><p>Could not load decrees. Check your Firebase config.</p></div>`;
@@ -390,7 +559,22 @@
       if (!btn) return;
       document.querySelectorAll('.cat-filter-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      renderList(btn.dataset.cat);
+      renderList();
+    });
+
+    const searchInput = document.getElementById('search-input');
+    const searchClear = document.getElementById('search-clear');
+    let searchDebounce;
+    searchInput.addEventListener('input', () => {
+      searchClear.classList.toggle('show', !!searchInput.value);
+      clearTimeout(searchDebounce);
+      searchDebounce = setTimeout(renderList, 150);
+    });
+    searchClear.addEventListener('click', () => {
+      searchInput.value = '';
+      searchClear.classList.remove('show');
+      renderList();
+      searchInput.focus();
     });
 
     loadDecrees();
